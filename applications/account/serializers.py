@@ -57,4 +57,36 @@ class LoginSerializer(serializers.Serializer):
         if not user:
             raise serializers.ValidationError('Неверный email или пароль')
         attrs['user'] = user
-        return attrs        
+        return attrs
+
+
+class ChangePasswordSerializer(serializers.ModelSerializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(
+        required=True,
+        min_length=6
+    )
+    new_password_confrim = serializers.CharField(
+        required=True,
+        min_length=6
+    )
+
+    def validate(self, attrs):
+        p1 = attrs.get('new_password')
+        p2 = attrs.get('new_password_confrim')
+        if p1 != p2:
+            raise serializers.ValidationError('Пароли не совпадают!')
+        return attrs
+
+    def validate_old_password(self, p):
+        request = self.context.get('request')
+        user = request.user
+        if user.check_password(p):
+            raise serializers.ValidationError('Неверный пароль!')
+        return p
+
+    def set_new_password(self):
+        user = self.context.get('request').user
+        password = self.validated_data.get('new_password')
+        user.set_password(password)
+        user.save()

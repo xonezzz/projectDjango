@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
+from applications.account.serializers import LoginSerializer, RegisterSerializer
+from rest_framework.authtoken.views import ObtainAuthToken
 
 
 class RegisterApiView(APIView):

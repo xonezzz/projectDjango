@@ -26,8 +26,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBAG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWeD_HOSTS').split(',')
-
+ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
 
 # Application definition
 
@@ -41,6 +40,7 @@ INSTALLED_APPS = [
 
     # library 
     'rest_framework',
+    'rest_framework.authtoken',
 
     # my app
     'applications.account',
@@ -132,3 +132,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'account.CustomUser'
